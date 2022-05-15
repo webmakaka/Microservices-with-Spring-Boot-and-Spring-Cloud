@@ -6,13 +6,13 @@
 
 <br/>
 
-• Chapter 1. Introduction to Microservices  
-• Chapter 2. Introduction to Spring Boot  
-• Chapter 3. Creating a Set of Cooperating Microservices  
-• Chapter 4. Deploying Our Microservices Using Docker  
-• Chapter 5. Adding an API Description Using OpenAPI  
-• Chapter 6. Adding Persistence  
-• Chapter 7. Developing Reactive Microservices  
+• Chapter 01. Introduction to Microservices  
+• Chapter 02. Introduction to Spring Boot  
+• [Chapter 03. Creating a Set of Cooperating Microservices](03-Chapter.md)  
+• Chapter 04. Deploying Our Microservices Using Docker  
+• Chapter 05. Adding an API Description Using OpenAPI  
+• Chapter 06. Adding Persistence  
+• Chapter 07. Developing Reactive Microservices  
 
 
 <br/>
@@ -21,8 +21,8 @@
 
 <br/>
 
-• Chapter 8. Introduction to Spring Cloud  
-• Chapter 9. Adding Service Discovery Using Netflix Eureka  
+• Chapter 08. Introduction to Spring Cloud  
+• Chapter 09. Adding Service Discovery Using Netflix Eureka  
 • Chapter 10. Using Spring Cloud Gateway to Hide Microservices behind an Edge
 Server  
 • Chapter 11. Securing Access to APIs  
