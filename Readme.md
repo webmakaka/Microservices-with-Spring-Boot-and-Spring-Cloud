@@ -15,6 +15,13 @@ https://github.com/PacktPublishing/Microservices-with-Spring-Boot-and-Spring-Clo
 
 <br/>
 
+```
+$ java -version
+java version "17.0.2" 2022-01-18 LTS
+```
+
+<br/>
+
 ### [Development](/docs/00-Development.md)
 
 
