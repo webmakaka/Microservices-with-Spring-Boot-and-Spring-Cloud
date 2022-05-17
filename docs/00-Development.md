@@ -10,8 +10,7 @@
 • Chapter 02. Introduction to Spring Boot  
 • [Chapter 03. Creating a Set of Cooperating Microservices](03-Chapter.md)  
 • [Chapter 04. Deploying Our Microservices Using Docker](04-Chapter.md)  
-•   
-• Chapter 05. Adding an API Description Using OpenAPI  
+• [Chapter 05. Adding an API Description Using OpenAPI](05-Chapter.md)  
 • Chapter 06. Adding Persistence  
 • Chapter 07. Developing Reactive Microservices  
 
