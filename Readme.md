@@ -15,10 +15,27 @@ https://github.com/PacktPublishing/Microservices-with-Spring-Boot-and-Spring-Clo
 
 <br/>
 
+### Environment
+
+```
+$ cat /etc/os-release | grep 'VERSION='
+VERSION="20.04.4 LTS (Focal Fossa)"
+```
+
+<br/>
+
 ```
 $ java -version
 java version "17.0.2" 2022-01-18 LTS
 ```
+
+<br/>
+
+```
+$ docker -v
+Docker version 20.10.15, build fd82621
+```
+
 
 <br/>
 
