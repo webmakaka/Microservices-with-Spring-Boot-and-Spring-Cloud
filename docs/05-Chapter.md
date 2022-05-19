@@ -13,13 +13,14 @@ $ ./gradlew build && docker-compose build && docker-compose up -d
 <br/>
 
 ```
+// OK!
 $ ./test-em-all.bash
 ```
 
 <br/>
 
 ```
-OK!
+// OK!
 http://localhost:8080/openapi/swagger-ui.html
 ```
 
