@@ -1,4 +1,4 @@
-# [Book] [Juha Hinkula] Microservices with Spring Boot and Spring Cloud [ENG, 2021]
+# [Book] [Magnus Larsson] Microservices with Spring Boot and Spring Cloud [ENG, 2021]
 
 <br/>
 

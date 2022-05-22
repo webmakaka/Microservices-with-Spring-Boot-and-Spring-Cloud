@@ -1,4 +1,4 @@
-# [Book] [Juha Hinkula] Microservices with Spring Boot and Spring Cloud [ENG, 2021]
+# [Book] [Magnus Larsson] Microservices with Spring Boot and Spring Cloud [ENG, 2021]
 
 <br/>
 
@@ -15,13 +15,14 @@
 
 <br/>
 
-### Using RabbitMQ without using partitions
-
-<br/>
-
 ```
 $ cd apps/Chapter07/
 ```
+
+<br/>
+
+### Using RabbitMQ without using partitions
+
 
 <br/>
 
@@ -57,7 +58,8 @@ $ body='{"productId":1,"name":"product name C","weight":300,
 "reviews":[
   {"reviewId":1,"author":"author 1","subject":"subject 1","content":"content 1"}, 
   {"reviewId":2,"author":"author 2","subject":"subject 2","content":"content 2"}, 
-  {"reviewId":3,"author":"author 3","subject":"subject 3","content":"content 3"}]}'
+  {"reviewId":3,"author":"author 3","subject":"subject 3","content":"content 3"}
+]}'
 
 
 // OK!

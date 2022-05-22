@@ -1,4 +1,4 @@
-# [Book] [Juha Hinkula] Microservices with Spring Boot and Spring Cloud [ENG, 2021]
+# [Book] [Magnus Larsson] Microservices with Spring Boot and Spring Cloud [ENG, 2021]
 
 <br/>
 
@@ -22,7 +22,7 @@
 <br/>
 
 • Chapter 08. Introduction to Spring Cloud  
-• Chapter 09. Adding Service Discovery Using Netflix Eureka  
+[Chapter 09. Adding Service Discovery Using Netflix Eureka](09-Chapter.md) 
 • Chapter 10. Using Spring Cloud Gateway to Hide Microservices behind an Edge
 Server  
 • Chapter 11. Securing Access to APIs  
