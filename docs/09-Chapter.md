@@ -16,7 +16,6 @@ $ cd apps/Chapter09/
 $ ./gradlew build && docker-compose build
 ```
 
-
 <br/>
 
 ```
@@ -24,7 +23,6 @@ $ ./test-em-all.bash start
 ```
 
 <br/>
-
 
 ```
 // Launch two extra review microservice instances
