@@ -22,9 +22,9 @@
 <br/>
 
 • Chapter 08. Introduction to Spring Cloud  
-•[Chapter 09. Adding Service Discovery Using Netflix Eureka](09-Chapter.md)  
-•[Chapter 10. Using Spring Cloud Gateway to Hide Microservices behind an Edge Server](10-Chapter.md)   
-• Chapter 11. Securing Access to APIs  
+• [Chapter 09. Adding Service Discovery Using Netflix Eureka](09-Chapter.md)  
+• [Chapter 10. Using Spring Cloud Gateway to Hide Microservices behind an Edge Server](10-Chapter.md)   
+• [Chapter 11. Securing Access to APIs](11-Chapter.md)  
 • Chapter 12. Centralized Configuration  
 • Chapter 13. Improving Resilience Using Resilience4j  
 • Chapter 14. Understanding Distributed Tracing  
