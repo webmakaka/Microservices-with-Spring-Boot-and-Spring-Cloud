@@ -4,13 +4,11 @@
 
 ## Chapter 11. Securing Access to APIs
 
-
 <br/>
 
 ![Application](/img/ch11-pic01.png?raw=true)
 
 <br/>
-
 
 The self-signed certificate is created with the following command:
 
@@ -129,7 +127,6 @@ $ curl -k https://writer:secret@localhost:8443/oauth2/token -d grant_type=client
 <br/>
 
 ### Acquiring access tokens using the authorization code grant flow
-
 
 ```
 // u / p
@@ -277,7 +274,6 @@ https://openid.net/developers/certified/
 ```
 $ docker-compose logs product-composite | grep "Authorization info"
 ```
-
 
 <br/>
 
