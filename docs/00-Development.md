@@ -27,7 +27,7 @@
 • [Chapter 11. Securing Access to APIs](11-Chapter.md)  
 • [Chapter 12. Centralized Configuration](12-Chapter.md)  
 • [Chapter 13. Improving Resilience Using Resilience4j](13-Chapter.md)  
-• Chapter 14. Understanding Distributed Tracing  
+• [Chapter 14. Understanding Distributed Tracing](14-Chapter.md)  
 
 <br/>
 
