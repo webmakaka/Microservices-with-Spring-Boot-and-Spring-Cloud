@@ -118,11 +118,6 @@ $ curl https://dev-usr:dev-pwd@localhost:8443/config/product/docker -ks | jq .
 
 <br/>
 
-If you want to use an encrypted value in a configuration file, you need to prefix it with {cipher} and wrap it in '' .
-
-
-<br/>
-
 ```
 // ENCRYPT
 $ curl -k https://dev-usr:dev-pwd@localhost:8443/config/encrypt --data-urlencode "hello world"
@@ -134,6 +129,10 @@ $ curl -k https://dev-usr:dev-pwd@localhost:8443/config/encrypt --data-urlencode
 // DECRYPT
 $ curl -k https://dev-usr:dev-pwd@localhost:8443/config/decrypt -d 9eca39e823957f37f0f0f4d8b2c6c46cd49ef461d1cab20c65710823a8b412ce
 ```
+
+<br/>
+
+If you want to use an encrypted value in a configuration file, you need to prefix it with {cipher} and wrap it in '' .
 
 <br/>
 
