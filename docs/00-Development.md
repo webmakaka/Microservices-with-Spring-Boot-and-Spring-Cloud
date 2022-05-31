@@ -35,9 +35,9 @@
 
 <br/>
 
-• Chapter 15. Introduction to Kubernetes  
+• [Chapter 15. Introduction to Kubernetes](15-Chapter.md)  
 • [Chapter 16. Deploying Our Microservices in Kubernetes](16-Chapter.md)  
-• Chapter 17. Implementing Kubernetes Features to Simplify the System Landscape  
+• [Chapter 17. Implementing Kubernetes Features to Simplify the System Landscape](17-Chapter.md)  
 • Chapter 18. Using a Service Mesh to Improve Observability and Management  
 • Chapter 19. Centralized Logging with the EFK Stack  
 • Chapter 20. Monitoring Microservices  
