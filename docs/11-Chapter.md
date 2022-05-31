@@ -21,29 +21,7 @@ $ keytool -genkeypair -alias localhost -keyalg RSA -keysize 2048
 
 The certificate file created, edge.p12 , is placed in the gateway projects folder, src/main/resources/keystore . This means that the certificate file will be placed in the .jar file when it is built and will be available on the classpath at runtime at keystore/edge.p12.
 
-
 Providing certificates using the classpath is sufficient during development, but not applicable to other environments, for example, a production environment.
-
-<br/>
-
-### Replacing a self-signed certificate at runtime
-
-To replace the certificate packaged in the .jar file, perform the following steps:
-
-
-```
-$ cd apps/Chapter11/
-$ mkdir keystore
-$ keytool -genkeypair -alias localhost -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore keystore/edge-test.p12 -validity 3650
-```
-
-<br/>
-
-```
-// docker-compose restart gateway does not take changes in docker-compose.yml
-$ docker-compose up -d --scale gateway=0
-$ docker-compose up -d --scale gateway=1
-```
 
 
 <br/>
@@ -79,11 +57,13 @@ https://u:p@localhost:8443/eureka/apps
 
 <br/>
 
-**response:**
-
 ```
 $ curl -H "accept:application/json" https://u:p@localhost:8443/eureka/api/apps -ks | jq -r .applications.application[].instance[].instanceId
 ```
+
+<br/>
+
+**response:**
 
 <br/>
 
@@ -123,7 +103,6 @@ $ curl -k https://writer:secret@localhost:8443/oauth2/token -d grant_type=client
 }
 ```
 
-
 <br/>
 
 ### Acquiring access tokens using the authorization code grant flow
@@ -135,7 +114,7 @@ https://localhost:8443/oauth2/authorize?response_type=code&client_id=reader&redi
 
 <br/>
 
-Will redirect on:
+**Will redirect on:**
 
 ```
 https://my.redirect.uri/?code=vTCgG8YxakUgCcqUK0ocwjFuTcwnM-MUA1UTsM5IG9Ej6PQgWx5MhHbwbes-x7XXpjdOY5KuaizprmNV0eryPbi_v-Z9TZOgZ9lPrjMmooScVj1IW4TVeHuUuRZCiwMg&state=35725
@@ -172,7 +151,6 @@ $ curl -k https://reader:secret@localhost:8443/oauth2/token \
 
 <br/>
 
-
 ```
 // To get an authorization code for the writer client
 https://localhost:8443/oauth2/authorize?response_type=code&client_id=writer&redirect_uri=https://my.redirect.uri&scope=product:read+product:write&state=72489
@@ -192,7 +170,6 @@ $ curl -k https://writer:secret@localhost:8443/oauth2/token \
 <br/>
 
 ### Calling protected APIs using access tokens
-
 
 <br/>
 
@@ -235,7 +212,7 @@ content-length: 714
 
 <br/>
 
-### [FAIL!] Testing Swagger UI with OAuth 2.0
+### Testing Swagger UI with OAuth 2.0
 
 <br/>
 
@@ -243,22 +220,8 @@ content-length: 714
 https://localhost:8443/openapi/swagger-ui.html
 ```
 
-Authorize -> Select All -> Autrorize -> FAIL!
+Authorize -> Select All -> Autrorize -> u / p
 
-<br/>
-
-```
-***
-2022-05-25 22:52:55.560  INFO 1 --- [           main] c.n.d.s.t.d.RedirectingEurekaHttpClient  : Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://u:p@eureka:8761/eureka/}, exception=I/O error on GET request for "http://u:p@eureka:8761/eureka/apps/": Connect to eureka:8761 [eureka/172.22.0.5] failed: Connection refused; nested exception is org.apache.http.conn.HttpHostConnectException: Connect to eureka:8761 [eureka/172.22.0.5] failed: Connection refused stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://u:p@eureka:8761/eureka/apps/": Connect to eureka:8761 [eureka/172.22.0.5] failed: Connection refused; nested exception is org.apache.http.conn.HttpHostConnectException: Connect to eureka:8761 [eureka/172.22.0.5] failed: Connection refused
-```
-
-<br/>
-
-```
-// Inside container
-// OK!
-$ curl http://u:p@eureka:8761/eureka/apps
-```
 
 <br/>
 
@@ -280,6 +243,31 @@ $ docker-compose logs product-composite | grep "Authorization info"
 ```
 $ docker-compose down
 ```
+
+
+<br/>
+
+### Replacing a self-signed certificate at runtime
+
+To replace the certificate packaged in the .jar file, perform the following steps:
+
+
+<br/>
+
+```
+$ cd apps/Chapter11/
+$ mkdir keystore
+$ keytool -genkeypair -alias localhost -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore keystore/edge-test.p12 -validity 3650
+```
+
+<br/>
+
+```
+// docker-compose restart gateway does not take changes in docker-compose.yml
+$ docker-compose up -d --scale gateway=0
+$ docker-compose up -d --scale gateway=1
+```
+
 
 <br/><br/>
 

@@ -4,11 +4,9 @@
 
 ## Chapter 15. Introduction to Kubernetes
 
-
 <br/>
 
 ### Run Minikube
-
 
 <br/>
 
@@ -47,8 +45,6 @@ $ docker pull mongo:4.4.2
 $ docker pull rabbitmq:3.8.11-management
 $ docker pull openzipkin/zipkin:2.23.2
 ```
-
-
 
 <br/><br/>
 

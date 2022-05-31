@@ -7,11 +7,6 @@
 
 <br/>
 
-## Verifying that the microservices work without Kubernetes
-
-
-<br/>
-
 ```
 $ cd apps/Chapter17/
 ```
@@ -21,6 +16,11 @@ $ cd apps/Chapter17/
 ```
 $ ./gradlew build && docker-compose build
 ```
+
+
+<br/>
+
+## Docker (without Kubernetes)
 
 <br/>
 
@@ -40,7 +40,6 @@ $ COMPOSE_FILE=docker-compose-partitions.yml ./test-em-all.bash start stop
 $ COMPOSE_FILE=docker-compose-kafka.yml ./test-em-all.bash start stop
 ```
 
-
 <br/>
 <hr/>
 <br/>
@@ -50,7 +49,7 @@ $ COMPOSE_FILE=docker-compose-kafka.yml ./test-em-all.bash start stop
 
 <br/>
 
-The following topics will be covered in this chapter:
+**The following topics will be covered in this chapter:**
 
 • Replacing the Spring Cloud Config Server with Kubernetes ConfigMaps and Secrets
 • Replacing the Spring Cloud Gateway with a Kubernetes Ingress object
@@ -67,14 +66,23 @@ The following topics will be covered in this chapter:
 ![Application](/img/ch17-pic02.png?raw=true)
 
 
-```
-$ helm template kubernetes/helm/environments/dev-env
-```
-
 <br/>
 
 Since self-signed certificates don't require communication with any external resources, they are a good candidate for use during development. 
 
+
+<br/>
+
+```
+$ cd apps/Chapter17/
+
+$ eval $(minikube docker-env)
+$ ./gradlew build && docker-compose build
+```
+
+<br/>
+
+### [Run Minikube](15-Chapter.md)
 
 <br/>
 
@@ -105,18 +113,9 @@ $ kubectl get pods --namespace cert-manager
 
 ```
 // Map minikube.me to the IP address we can use to reach the Minikube instance
-$ sudo bash -c "echo $(minikube ip) minikube.me | tee -a /
-etc/hosts"
+$ sudo bash -c "echo $(minikube ip) minikube.me | tee -a /etc/hosts"
 ```
 
-<br/>
-
-```
-$ cd apps/Chapter17/
-
-$ eval $(minikube docker-env)
-$ ./gradlew build && docker-compose build
-```
 
 <br/>
 
@@ -124,6 +123,7 @@ $ ./gradlew build && docker-compose build
 // Resolving Helm chart dependencies
 $ for f in kubernetes/helm/components/*; do helm dep up $f; done
 $ for f in kubernetes/helm/environments/*; do helm dep up $f; done
+$ helm dep ls kubernetes/helm/environments/prod-env/
 ```
 
 <br/>
@@ -160,7 +160,7 @@ $ {
 
 ```
 $ helm install hands-on-prod-env \
-$ kubernetes/helm/environments/prod-env \
+kubernetes/helm/environments/prod-env \
 -n hands-on --create-namespace \
 --wait
 ```
