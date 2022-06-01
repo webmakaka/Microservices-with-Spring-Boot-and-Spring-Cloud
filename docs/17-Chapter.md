@@ -4,46 +4,7 @@
 
 ## Chapter 17. Implementing Kubernetes Features to Simplify the System Landscape
 
-
 <br/>
-
-```
-$ cd apps/Chapter17/
-```
-
-<br/>
-
-```
-$ ./gradlew build && docker-compose build
-```
-
-
-<br/>
-
-## Docker (without Kubernetes)
-
-<br/>
-
-```
-$ COMPOSE_FILE=docker-compose.yml ./test-em-all.bash start stop
-```
-
-<br/>
-
-```
-$ COMPOSE_FILE=docker-compose-partitions.yml ./test-em-all.bash start stop
-```
-
-<br/>
-
-```
-$ COMPOSE_FILE=docker-compose-kafka.yml ./test-em-all.bash start stop
-```
-
-<br/>
-<hr/>
-<br/>
-
 
 ## Kubernetes
 
@@ -70,15 +31,6 @@ $ COMPOSE_FILE=docker-compose-kafka.yml ./test-em-all.bash start stop
 
 Since self-signed certificates don't require communication with any external resources, they are a good candidate for use during development. 
 
-
-<br/>
-
-```
-$ cd apps/Chapter17/
-
-$ eval $(minikube docker-env)
-$ ./gradlew build && docker-compose build
-```
 
 <br/>
 
@@ -141,6 +93,12 @@ $ kubectl config set-context $(kubectl config current-context) --namespace=hands
 
 ```
 $ eval $(minikube docker-env)
+$ ./gradlew build && docker-compose build
+```
+
+<br/>
+
+```
 $ docker-compose up -d mongodb mysql rabbitmq
 ```
 
@@ -168,6 +126,12 @@ kubernetes/helm/environments/prod-env \
 <br/>
 
 ```
+$ kubectl get pods -n hands-on
+```
+
+<br/>
+
+```
 $ HOST=minikube.me PORT=443 USE_K8S=true ./test-em-all.bash
 ```
 
@@ -189,7 +153,7 @@ $ kubectl delete namespace hands-on
 <hr/>
 <br/>
 
-### Working with certificates
+### [Additional] Working with certificates
 
 <br/>
 
@@ -260,6 +224,32 @@ $ kubectl patch certificate tls-certificate --type=json \
 ```
 $ kubectl delete namespace hands-on
 ```
+
+<br/>
+
+## Docker (without Kubernetes)
+
+<br/>
+
+```
+$ COMPOSE_FILE=docker-compose.yml ./test-em-all.bash start stop
+```
+
+<br/>
+
+```
+$ COMPOSE_FILE=docker-compose-partitions.yml ./test-em-all.bash start stop
+```
+
+<br/>
+
+```
+$ COMPOSE_FILE=docker-compose-kafka.yml ./test-em-all.bash start stop
+```
+
+<br/>
+<hr/>
+<br/>
 
 
 <br/><br/>
