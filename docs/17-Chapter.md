@@ -167,13 +167,45 @@ MODIFIED   tls-certificate   True    tls-certificate   1s
 <br/>
 
 ```
-$ kubectl get pods -n hands-on
+$ kubectl get pods
+```
+
+```
+NAME                                 READY   STATUS             RESTARTS   AGE
+auth-server-6b7cf86b66-thnsl         0/1     Error              3          70s
+product-7bb8dd5dbb-tnldm             0/1     CrashLoopBackOff   3          70s
+product-composite-85fc98c8bf-s5j5v   0/1     CrashLoopBackOff   3          70s
+recommendation-7c9bbd76f8-qbjcx      0/1     CrashLoopBackOff   3          69s
+review-7b48469995-5jbqc              0/1     CrashLoopBackOff   3          70s
+zipkin-server-6b9b4d988f-g78hq       1/1     Running            0          70s
 ```
 
 <br/>
 
 ```
-$ kubectl -n hands-on get cm 
+$ kubectl logs product-7bb8dd5dbb-tnldm
+```
+
+<br/>
+
+```
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Config data resource 'file [/config-repo/product.yml]' via location 'file:/config-repo/product.yml' does not exist
+
+Action:
+
+Check that the value 'file:/config-repo/product.yml' is correct, or prefix it with 'optional:'
+```
+
+<br/>
+
+```
+$ kubectl get cm 
 NAME                DATA   AGE
 auth-server         0      33m
 kube-root-ca.crt    1      33m
@@ -300,10 +332,6 @@ $ COMPOSE_FILE=docker-compose-partitions.yml ./test-em-all.bash start stop
 ```
 $ COMPOSE_FILE=docker-compose-kafka.yml ./test-em-all.bash start stop
 ```
-
-<br/>
-<hr/>
-<br/>
 
 
 <br/><br/>
