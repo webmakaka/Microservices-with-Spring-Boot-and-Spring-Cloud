@@ -64,10 +64,30 @@ $ kubectl get pods --namespace cert-manager
 <br/>
 
 ```
+NAME                                       READY   STATUS    RESTARTS   AGE
+cert-manager-7998c69865-v6jrx              1/1     Running   0          43s
+cert-manager-cainjector-7b744d56fb-ptqt5   1/1     Running   0          43s
+cert-manager-webhook-7d6d4c78bc-6cztp      1/1     Running   0          43s
+```
+
+<br/>
+
+```
 // Map minikube.me to the IP address we can use to reach the Minikube instance
 $ sudo bash -c "echo $(minikube ip) minikube.me | tee -a /etc/hosts"
 ```
 
+
+<br/>
+
+## Deploying to Kubernetes for staging and production
+
+<br/>
+
+```
+$ eval $(minikube docker-env)
+$ ./gradlew build && docker-compose build
+```
 
 <br/>
 
@@ -81,19 +101,20 @@ $ helm dep ls kubernetes/helm/environments/prod-env/
 <br/>
 
 ```
+NAME             	VERSION	REPOSITORY                               	STATUS
+common           	1.0.0  	file://../../common                      	ok    
+auth-server      	1.0.0  	file://../../components/auth-server      	ok    
+product          	1.0.0  	file://../../components/product          	ok    
+recommendation   	1.0.0  	file://../../components/recommendation   	ok    
+review           	1.0.0  	file://../../components/review           	ok    
+product-composite	1.0.0  	file://../../components/product-composite	ok    
+zipkin-server    	1.0.0  	file://../../components/zipkin-server    	ok
+```
+
+<br/>
+
+```
 $ kubectl config set-context $(kubectl config current-context) --namespace=hands-on
-```
-
-
-<br/>
-
-## Deploying to Kubernetes for staging and production
-
-<br/>
-
-```
-$ eval $(minikube docker-env)
-$ ./gradlew build && docker-compose build
 ```
 
 <br/>
@@ -117,6 +138,13 @@ $ {
 <br/>
 
 ```
+// Additional terminal
+$ kubectl get certificates -w --output-watch-events
+```
+
+<br/>
+
+```
 $ helm install hands-on-prod-env \
 kubernetes/helm/environments/prod-env \
 -n hands-on --create-namespace \
@@ -126,7 +154,33 @@ kubernetes/helm/environments/prod-env \
 <br/>
 
 ```
+EVENT      NAME              READY   SECRET            AGE
+ADDED      tls-certificate           tls-certificate   0s
+MODIFIED   tls-certificate   False   tls-certificate   0s
+MODIFIED   tls-certificate   False   tls-certificate   1s
+MODIFIED   tls-certificate   False   tls-certificate   1s
+MODIFIED   tls-certificate   True    tls-certificate   1s
+MODIFIED   tls-certificate   True    tls-certificate   1s
+MODIFIED   tls-certificate   True    tls-certificate   1s
+```
+
+<br/>
+
+```
 $ kubectl get pods -n hands-on
+```
+
+<br/>
+
+```
+$ kubectl -n hands-on get cm 
+NAME                DATA   AGE
+auth-server         0      33m
+kube-root-ca.crt    1      33m
+product             0      33m
+product-composite   0      33m
+recommendation      0      33m
+review              0      33m
 ```
 
 <br/>

@@ -10,11 +10,10 @@
 
 ![Application](/img/ch16-pic01.png?raw=true)
 
-<br/>
-
-### Deploying to Kubernetes for development and test
 
 <br/>
+
+## Prepare
 
 ```
 $ cd apps/Chapter16/
@@ -22,6 +21,12 @@ $ cd apps/Chapter16/
 $ cd kubernetes/helm/components/config-server
 
 $ ln -s ../../../../config-repo config-repo
+```
+
+<br/>
+
+```
+$ cd ../../../../
 
 $ ls -l kubernetes/helm/components/config-server/config-repo
 
@@ -33,8 +38,6 @@ auth-server.yml  product-composite.yml  recommendation.yml
 <br/>
 
 ```
-$ cd apps/Chapter16/
-
 // directs the local Docker client to communicate with the Docker engine in Minikube
 $ eval $(minikube docker-env)
 $ ./gradlew build && docker-compose build
@@ -42,11 +45,264 @@ $ ./gradlew build && docker-compose build
 
 <br/>
 
-### Resolving Helm chart dependencies
-
 ```
 $ for f in kubernetes/helm/components/*; do helm dep up $f; done
 $ for f in kubernetes/helm/environments/*; do helm dep up $f; done
+```
+
+
+<br/>
+
+## Deploying to Kubernetes for staging and production
+
+
+<br/>
+
+### Resolving Helm chart dependencies
+
+```
+$ helm dep ls kubernetes/helm/environments/prod-env/
+```
+
+<br/>
+
+```
+NAME             	VERSION	REPOSITORY                               	STATUS
+common           	1.0.0  	file://../../common                      	ok    
+config-server    	1.0.0  	file://../../components/config-server    	ok    
+gateway          	1.0.0  	file://../../components/gateway          	ok    
+auth-server      	1.0.0  	file://../../components/auth-server      	ok    
+product          	1.0.0  	file://../../components/product          	ok    
+recommendation   	1.0.0  	file://../../components/recommendation   	ok    
+review           	1.0.0  	file://../../components/review           	ok    
+product-composite	1.0.0  	file://../../components/product-composite	ok    
+zipkin-server    	1.0.0  	file://../../components/zipkin-server    	ok 
+```
+
+<br/>
+
+```
+$ eval $(minikube docker-env)
+$ docker-compose up -d mongodb mysql rabbitmq
+```
+
+<br/>
+
+```
+$ {
+  docker tag hands-on/auth-server hands-on/auth-server:v1
+  docker tag hands-on/config-server hands-on/config-server:v1
+  docker tag hands-on/gateway hands-on/gateway:v1
+  docker tag hands-on/product-composite-service hands-on/product-composite-service:v1
+  docker tag hands-on/product-service hands-on/product-service:v1
+  docker tag hands-on/recommendation-service hands-on/recommendation-service:v1
+  docker tag hands-on/review-service hands-on/review-service:v1
+}
+```
+
+<br/>
+
+```
+$ helm install hands-on-prod-env \ kubernetes/helm/environments/prod-env \
+-n hands-on --create-namespace
+```
+
+<br/>
+
+```
+$ kubectl get pods -n hands-on --watch
+```
+
+<br/>
+
+```
+NAME                                 READY   STATUS    RESTARTS   AGE
+auth-server-555494d479-wn8fq         1/1     Running   0          4m43s
+config-server-7777c4b99-r997z        1/1     Running   0          4m43s
+gateway-85879b4578-g7kjl             1/1     Running   2          4m43s
+product-7d996cb4fb-h5z29             1/1     Running   0          4m43s
+product-composite-86754f9bfd-gftxp   1/1     Running   2          4m43s
+recommendation-84d84899f8-tg8kx      1/1     Running   0          4m43s
+review-657b77ccf-vxbvd               1/1     Running   0          4m43s
+zipkin-server-6b66b74877-q997x       1/1     Running   0          4m43s
+```
+
+<br/>
+
+```
+$ kubectl wait --timeout=600s --for=condition=ready pod --all
+```
+
+<br/>
+
+```
+$ kubectl -n hands-on exec deploy/config-server -- ls /config-repo
+```
+
+<br/>
+
+**response:**
+
+```
+application.yml
+auth-server.yml
+gateway.yml
+product-composite.yml
+product.yml
+recommendation.yml
+review.yml
+```
+
+<br/>
+
+```
+$ kubectl get pods -o json | jq .items[].spec.containers[].image
+```
+
+<br/>
+
+```
+"hands-on/auth-server:v1"
+"hands-on/config-server:v1"
+"hands-on/gateway:v1"
+"hands-on/product-service:v1"
+"hands-on/product-composite-service:v1"
+"hands-on/recommendation-service:v1"
+"hands-on/review-service:v1"
+"registry.hub.docker.com/openzipkin/zipkin:2.23.2"
+```
+
+
+<br/>
+
+```
+$ MINIKUBE_HOST=$(minikube ip)
+```
+
+<br/>
+
+```
+// OK!
+$ CONFIG_SERVER_USR=prod-usr \
+CONFIG_SERVER_PWD=prod-pwd \
+HOST=${MINIKUBE_HOST} PORT=30443 USE_K8S=true ./test-em-all.bash
+```
+
+<br/>
+
+```
+$ kubectl exec deploy/config-server -- curl prod-usr:prod-pwd@localhost:8888/product/docker -s | jq .
+```
+
+<br/>
+
+
+```
+{
+  "name": "product",
+  "profiles": [
+    "docker"
+  ],
+  "label": null,
+  "version": null,
+  "state": null,
+  "propertySources": [
+    {
+      "name": "Config resource 'file [/config-repo/product.yml]' via location 'file:/config-repo/' (document #1)",
+      "source": {
+        "spring.config.activate.on-profile": "docker",
+        "server.port": 80,
+        "spring.data.mongodb.host": "mongodb"
+      }
+    },
+    {
+      "name": "Config resource 'file [/config-repo/product.yml]' via location 'file:/config-repo/' (document #0)",
+      "source": {
+        "server.port": 7001,
+        "server.error.include-message": "always",
+        "spring.data.mongodb.host": "localhost",
+        "spring.data.mongodb.port": 27017,
+        "spring.data.mongodb.database": "product-db",
+        "spring.cloud.function.definition": "messageProcessor",
+        "spring.cloud.stream.default.contentType": "application/json",
+        "spring.cloud.stream.bindings.messageProcessor-in-0.destination": "products",
+        "spring.cloud.stream.bindings.messageProcessor-in-0.group": "productsGroup",
+        "spring.cloud.stream.bindings.messageProcessor-in-0.consumer.maxAttempts": 3,
+        "spring.cloud.stream.bindings.messageProcessor-in-0.consumer.backOffInitialInterval": 500,
+        "spring.cloud.stream.bindings.messageProcessor-in-0.consumer.backOffMaxInterval": 1000,
+        "spring.cloud.stream.bindings.messageProcessor-in-0.consumer.backOffMultiplier": 2,
+        "spring.cloud.stream.rabbit.bindings.messageProcessor-in-0.consumer.autoBindDlq": true,
+        "spring.cloud.stream.rabbit.bindings.messageProcessor-in-0.consumer.republishToDlq": true,
+        "spring.cloud.stream.kafka.bindings.messageProcessor-in-0.consumer.enableDlq": true,
+        "logging.level.root": "INFO",
+        "logging.level.se.magnus": "DEBUG",
+        "logging.level.org.springframework.data.mongodb.core.ReactiveMongoTemplate": "DEBUG"
+      }
+    },
+    {
+      "name": "Config resource 'file [/config-repo/application.yml]' via location 'file:/config-repo/' (document #1)",
+      "source": {
+        "spring.config.activate.on-profile": "docker",
+        "spring.rabbitmq.host": "rabbitmq",
+        "spring.cloud.stream.kafka.binder.brokers": "kafka",
+        "app.auth-server": "auth-server"
+      }
+    },
+    {
+      "name": "Config resource 'file [/config-repo/application.yml]' via location 'file:/config-repo/' (document #0)",
+      "source": {
+        "app.auth-server": "localhost",
+        "spring.rabbitmq.host": "127.0.0.1",
+        "spring.rabbitmq.port": 5672,
+        "spring.rabbitmq.username": "guest",
+        "spring.cloud.stream.kafka.binder.brokers": "127.0.0.1",
+        "spring.cloud.stream.kafka.binder.defaultBrokerPort": 9092,
+        "spring.cloud.stream.defaultBinder": "rabbit",
+        "spring.zipkin.sender.type": "rabbit",
+        "spring.sleuth.sampler.probability": 1,
+        "management.endpoint.health.show-details": "ALWAYS",
+        "management.endpoints.web.exposure.include": "*",
+        "management.endpoint.health.probes.enabled": true,
+        "management.endpoint.health.group.readiness.include": "rabbit, db, mongo",
+        "server.shutdown": "graceful",
+        "spring.lifecycle.timeout-per-shutdown-phase": "10s",
+        "spring.rabbitmq.password": "guest"
+      }
+    }
+  ]
+}
+```
+
+<br/>
+
+```
+$ kubectl -n hands-on exec deploy/config-server -- ls /config-repo
+```
+
+<br/>
+
+**response:**
+
+```
+application.yml
+auth-server.yml
+gateway.yml
+product-composite.yml
+product.yml
+recommendation.yml
+review.yml
+```
+
+<br/>
+
+## Deploying to Kubernetes for development and test
+
+
+<br/>
+
+### Resolving Helm chart dependencies
+
+```
 $ helm dep ls kubernetes/helm/environments/dev-env/
 ```
 
@@ -68,11 +324,9 @@ product-composite	1.0.0  	file://../../components/product-composite	ok
 zipkin-server    	1.0.0  	file://../../components/zipkin-server    	ok    
 ```
 
-
 <br/>
 
 ### Deploying to Kubernetes
-
 
 <br/>
 
@@ -207,7 +461,7 @@ $ kubectl -n hands-on exec deploy/config-server -- ls /config-repo
 **response:**
 
 ```
-pplication.yml
+application.yml
 auth-server.yml
 gateway.yml
 product-composite.yml
@@ -273,6 +527,8 @@ $ kubectl get pods -o json | jq .items[].spec.containers[].image
 <br/>
 
 ### Testing the deployment
+
+<br/>
 
 ```
 $ MINIKUBE_HOST=$(minikube ip)
@@ -394,84 +650,6 @@ $ helm uninstall hands-on-dev-env
 
 ```
 
-<br/>
-
-### Deploying to Kubernetes for staging and production
-
-<br/>
-
-```
-$ eval $(minikube docker-env)
-$ docker-compose up -d mongodb mysql rabbitmq
-```
-
-<br/>
-
-```
-$ {
-  docker tag hands-on/auth-server hands-on/auth-server:v1
-  docker tag hands-on/config-server hands-on/config-server:v1
-  docker tag hands-on/gateway hands-on/gateway:v1
-  docker tag hands-on/product-composite-service hands-on/product-composite-service:v1
-  docker tag hands-on/product-service hands-on/product-service:v1
-  docker tag hands-on/recommendation-service hands-on/recommendation-service:v1
-  docker tag hands-on/review-service hands-on/review-service:v1
-}
-```
-
-<br/>
-
-```
-$ helm install hands-on-prod-env \ kubernetes/helm/environments/prod-env \
--n hands-on --create-namespace
-```
-
-
-<br/>
-
-```
-$ kubectl get pods --watch
-```
-
-<br/>
-
-```
-$ kubectl wait --timeout=600s --for=condition=ready pod --all
-```
-
-<br/>
-
-```
-$ kubectl get pods -o json | jq .items[].spec.containers[].image
-```
-
-<br/>
-
-```
-"hands-on/auth-server:v1"
-"hands-on/config-server:v1"
-"hands-on/gateway:v1"
-"hands-on/product-service:v1"
-"hands-on/product-composite-service:v1"
-"hands-on/recommendation-service:v1"
-"hands-on/review-service:v1"
-"registry.hub.docker.com/openzipkin/zipkin:2.23.2"
-```
-
-
-<br/>
-
-```
-$ CONFIG_SERVER_USR=prod-usr \
-CONFIG_SERVER_PWD=prod-pwd \
-HOST=$MINIKUBE_HOST PORT=30443 USE_K8S=true ./test-em-all.bash
-```
-
-<br/>
-
-```
-$ kubectl exec deploy/config-server -- curl prod-usr:prod-pwd@localhost:8888/product/docker -s | jq .
-```
 
 
 <br/>
@@ -499,6 +677,8 @@ $ docker-compose down
 
 ### The ConfigMap template
 
+
+<br/>
 
 ```
 $ cd apps/Chapter16/kubernetes/helm/components/config-server
@@ -744,7 +924,6 @@ spec:
             limits:
               memory: 350Mi
 ```
-
 
 <br/><br/>
 

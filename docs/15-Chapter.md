@@ -31,19 +31,37 @@ $ minikube start \
 <br/>
 
 ```
-$ minikube profile handson-spring-boot-cloud
-$ minikube addons enable ingress
-$ minikube addons enable metrics-server
+$ {
+  minikube profile handson-spring-boot-cloud
+  minikube addons enable ingress
+  minikube addons enable metrics-server
+}
 ```
 
 <br/>
 
 ```
 $ eval $(minikube docker-env)
-$ docker pull mysql:5.7.32
-$ docker pull mongo:4.4.2
-$ docker pull rabbitmq:3.8.11-management
-$ docker pull openzipkin/zipkin:2.23.2
+$ { 
+  docker pull mysql:5.7.32
+  docker pull mongo:4.4.2
+  docker pull rabbitmq:3.8.11-management
+  docker pull openzipkin/zipkin:2.23.2
+}
+```
+
+
+<br/>
+
+```
+$ kubectl config set-context $(kubectl config current-context) --namespace=hands-on
+```
+
+<br/>
+
+```
+// Delete Minikube
+// $ minikube --profile handson-spring-boot-cloud stop && minikube --profile handson-spring-boot-cloud delete
 ```
 
 <br/><br/>
