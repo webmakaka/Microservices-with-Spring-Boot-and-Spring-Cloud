@@ -12,11 +12,11 @@
 
 **The following topics will be covered in this chapter:**
 
-• Replacing the Spring Cloud Config Server with Kubernetes ConfigMaps and Secrets
-• Replacing the Spring Cloud Gateway with a Kubernetes Ingress object
-• Using the cert-manager to automatically provision certificates
-• Deploying and testing the microservice landscape on Kubernetes
-• Deploying and testing the microservice landscape using Docker Compose to ensure that the source code in the microservices isn't locked into Kubernetes
+• Replacing the Spring Cloud Config Server with Kubernetes ConfigMaps and Secrets  
+• Replacing the Spring Cloud Gateway with a Kubernetes Ingress object  
+• Using the cert-manager to automatically provision certificates  
+• Deploying and testing the microservice landscape on Kubernetes  
+• Deploying and testing the microservice landscape using Docker Compose to ensure that the source code in the microservices isn't locked into Kubernetes  
 
 <br/>
 
@@ -36,6 +36,134 @@ Since self-signed certificates don't require communication with any external res
 
 ### [Run Minikube](15-Chapter.md)
 
+
+<br/>
+
+### Prepare
+
+<br/>
+
+```
+$ cd apps/Chapter17/
+```
+
+<br/>
+
+// auth-server
+
+```
+$ cd kubernetes/helm/components/auth-server/config-repo/
+```
+
+<br/>
+
+
+```
+$ {
+  ln -s ../../../../../config-repo/application.yml  application.yml
+  ln -s ../../../../../config-repo/auth-server.yml auth-server.yml
+}
+```
+
+
+<br/>
+
+// product-composite
+
+```
+$ cd kubernetes/helm/components/product-composite/config-repo/
+```
+
+<br/>
+
+
+```
+$ {
+  ln -s ../../../../../config-repo/application.yml  application.yml
+  ln -s ../../../../../config-repo/product-composite.yml product-composite.yml
+}
+```
+
+
+<br/>
+
+// product
+
+```
+$ cd kubernetes/helm/components/product/config-repo/
+```
+
+<br/>
+
+
+```
+$ {
+  ln -s ../../../../../config-repo/application.yml  application.yml
+  ln -s ../../../../../config-repo/product.yml product.yml
+}
+```
+
+
+<br/>
+
+// recommendation
+
+```
+$ cd kubernetes/helm/components/recommendation/config-repo/
+```
+
+<br/>
+
+
+```
+$ {
+  ln -s ../../../../../config-repo/application.yml  application.yml
+  ln -s ../../../../../config-repo/recommendation.yml recommendation.yml
+}
+```
+
+<br/>
+
+// review
+
+```
+$ cd kubernetes/helm/components/review/config-repo/
+```
+
+<br/>
+
+
+```
+$ {
+  ln -s ../../../../../config-repo/application.yml  application.yml
+  ln -s ../../../../../config-repo/review.yml review.yml
+}
+```
+
+
+
+<br/>
+
+```
+$ cd ../../../../../
+
+$ ls -l kubernetes/helm/components/product/config-repo
+```
+
+<br/>
+
+```
+lrwxrwxrwx 1 marley marley 42 Jun 13 19:26 application.yml -> ../../../../../config-repo/application.yml
+lrwxrwxrwx 1 marley marley 38 Jun 13 19:26 product.yml -> ../../../../../config-repo/product.yml
+```
+
+<br/>
+
+```
+$ ls kubernetes/helm/components/product/config-repo
+application.yml  product.yml
+```
+
 <br/>
 
 ### Install the cert-manager
@@ -48,11 +176,11 @@ $ helm repo add jetstack https://charts.jetstack.io
 $ helm repo update
 
 $ helm install cert-manager jetstack/cert-manager \
---create-namespace \
---namespace cert-manager \
---version v1.3.1 \
---set installCRDs=true \
---wait
+    --create-namespace \
+    --namespace cert-manager \
+    --version v1.3.1 \
+    --set installCRDs=true \
+    --wait
 ```
 
 <br/>
@@ -146,9 +274,9 @@ $ kubectl get certificates -w --output-watch-events
 
 ```
 $ helm install hands-on-prod-env \
-kubernetes/helm/environments/prod-env \
--n hands-on --create-namespace \
---wait
+    kubernetes/helm/environments/prod-env \
+    -n hands-on --create-namespace \
+    --wait
 ```
 
 <br/>
@@ -170,36 +298,24 @@ MODIFIED   tls-certificate   True    tls-certificate   1s
 $ kubectl get pods
 ```
 
+<br/>
+
 ```
-NAME                                 READY   STATUS             RESTARTS   AGE
-auth-server-6b7cf86b66-thnsl         0/1     Error              3          70s
-product-7bb8dd5dbb-tnldm             0/1     CrashLoopBackOff   3          70s
-product-composite-85fc98c8bf-s5j5v   0/1     CrashLoopBackOff   3          70s
-recommendation-7c9bbd76f8-qbjcx      0/1     CrashLoopBackOff   3          69s
-review-7b48469995-5jbqc              0/1     CrashLoopBackOff   3          70s
-zipkin-server-6b9b4d988f-g78hq       1/1     Running            0          70s
+$ kubectl get pods
+NAME                                 READY   STATUS    RESTARTS   AGE
+auth-server-6b7cf86b66-f896w         1/1     Running   0          74s
+product-7bb8dd5dbb-2ctsn             1/1     Running   0          74s
+product-composite-85fc98c8bf-qjghd   1/1     Running   1          74s
+recommendation-7c9bbd76f8-xrgsx      1/1     Running   0          74s
+review-7b48469995-zq6fv              1/1     Running   0          74s
+zipkin-server-6b9b4d988f-g9tzg       1/1     Running   0          74s
 ```
 
 <br/>
 
 ```
-$ kubectl logs product-7bb8dd5dbb-tnldm
-```
-
-<br/>
-
-```
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Config data resource 'file [/config-repo/product.yml]' via location 'file:/config-repo/product.yml' does not exist
-
-Action:
-
-Check that the value 'file:/config-repo/product.yml' is correct, or prefix it with 'optional:'
+// logs
+$ kubectl logs product-7bb8dd5dbb-2ctsn
 ```
 
 <br/>

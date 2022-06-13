@@ -18,14 +18,14 @@ $ unset KUBECONFIG
 
 ```
 $ minikube start \
---profile=handson-spring-boot-cloud \
---memory=10240 \
---cpus=4 \
---disk-size=30g \
---kubernetes-version=v1.20.5 \
---driver=docker \
---ports=8080:80 --ports=8443:443 \
---ports=30080:30080 --ports=30443:30443
+    --profile=handson-spring-boot-cloud \
+    --memory=10240 \
+    --cpus=4 \
+    --disk-size=30g \
+    --kubernetes-version=v1.20.5 \
+    --driver=docker \
+    --ports=8080:80 --ports=8443:443 \
+    --ports=30080:30080 --ports=30443:30443
 ```
 
 <br/>
