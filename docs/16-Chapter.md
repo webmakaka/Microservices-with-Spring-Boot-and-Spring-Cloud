@@ -538,7 +538,7 @@ $ MINIKUBE_HOST=$(minikube ip)
 
 ```
 // OK!
-$ HOST=$MINIKUBE_HOST PORT=30443 USE_K8S=true ./test-em-all.bash
+$ HOST=${MINIKUBE_HOST} PORT=30443 USE_K8S=true ./test-em-all.bash
 ```
 
 
@@ -556,7 +556,7 @@ $ ACCESS_TOKEN=$(curl -d grant_type=client_credentials \
 <br/>
 
 ```
-$ echo $ACCESS_TOKEN
+$ echo ${ACCESS_TOKEN}
 ```
 
 <br/>
