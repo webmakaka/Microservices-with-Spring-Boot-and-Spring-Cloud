@@ -92,8 +92,6 @@ prometheus             1/1     1            1           83s
 
 <br/>
 
-<br/>
-
 ### Install the cert-manager
 
 <br/>
