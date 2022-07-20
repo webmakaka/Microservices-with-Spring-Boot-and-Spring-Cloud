@@ -60,13 +60,15 @@ $ istio_version=$(istioctl version --short --remote=false)
 
 $ echo "Installing integrations for Istio v$istio_version"
 
-$ kubectl apply -n istio-system -f https://raw.githubusercontent.com/istio/istio/${istio_version}/samples/addons/kiali.yaml
+$ {
+  kubectl apply -n istio-system -f https://raw.githubusercontent.com/istio/istio/${istio_version}/samples/addons/kiali.yaml
 
-$ kubectl apply -n istio-system -f https://raw.githubusercontent.com/istio/istio/${istio_version}/samples/addons/jaeger.yaml
+  kubectl apply -n istio-system -f https://raw.githubusercontent.com/istio/istio/${istio_version}/samples/addons/jaeger.yaml
 
-$ kubectl apply -n istio-system -f https://raw.githubusercontent.com/istio/istio/${istio_version}/samples/addons/prometheus.yaml
+  kubectl apply -n istio-system -f https://raw.githubusercontent.com/istio/istio/${istio_version}/samples/addons/prometheus.yaml
 
-$ kubectl apply -n istio-system -f https://raw.githubusercontent.com/istio/istio/${istio_version}/samples/addons/grafana.yaml
+  kubectl apply -n istio-system -f https://raw.githubusercontent.com/istio/istio/${istio_version}/samples/addons/grafana.yaml
+}
 ```
 
 <br/>
@@ -139,6 +141,8 @@ $ sudo bash -c "echo $(minikube ip) minikube.me | tee -a /etc/hosts"
 
 ```
 $ cd apps/Chapter18
+
+// Mandatory step!
 $ helm upgrade --install istio-hands-on-addons kubernetes/helm/environments/istio-system -n istio-system --wait
 ```
 

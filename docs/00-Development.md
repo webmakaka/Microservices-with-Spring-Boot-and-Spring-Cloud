@@ -40,7 +40,8 @@
 • [Chapter 17. Implementing Kubernetes Features to Simplify the System Landscape](17-Chapter.md)  
 • [Chapter 18. Using a Service Mesh to Improve Observability and Management](18-Chapter.md)  
 • [Chapter 19. Centralized Logging with the EFK Stack](19-Chapter.md)  
-• Chapter 20. Monitoring Microservices  
+• [Chapter 20. Monitoring Microservices](20-Chapter.md)  
+
 
 <br/><br/>
 
