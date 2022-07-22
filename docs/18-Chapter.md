@@ -126,18 +126,9 @@ cert-manager-cainjector-7b744d56fb-ptqt5   1/1     Running   0          43s
 cert-manager-webhook-7d6d4c78bc-6cztp      1/1     Running   0          43s
 ```
 
-<!--
 
 <br/>
 
-```
-// Map minikube.me to the IP address we can use to reach the Minikube instance
-$ sudo bash -c "echo $(minikube ip) minikube.me | tee -a /etc/hosts"
-```
--->
-
-
-<br/>
 
 ```
 $ cd apps/Chapter18
@@ -167,6 +158,16 @@ hands-on-certificate   True    hands-on-certificate   20s
 ```
 $ minikube tunnel
 ```
+
+<!--
+
+<br/>
+
+```
+// Map minikube.me to the IP address we can use to reach the Minikube instance
+$ sudo bash -c "echo $(minikube ip) minikube.me | tee -a /etc/hosts"
+```
+-->
 
 <br/>
 

@@ -19,7 +19,15 @@ https://fluentular.herokuapp.com/
 
 **Need to repeat steps from previous chapter**
 
+### [Run Minikube](15-Chapter.md)
+
+### [Setup istioctl](18-Chapter.md)
+
+### [Install the cert-manager](18-Chapter.md)
+
 <br/>
+
+
 
 ```
 $ cd apps/Chapter19
@@ -66,6 +74,7 @@ Possible, need to kill product-composite to start.
 <br/>
 
 ```
+// Should be run already
 $ minikube tunnel
 ```
 
